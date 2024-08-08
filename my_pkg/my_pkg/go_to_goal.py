@@ -35,7 +35,7 @@ class goToNode(Node):
         angular_error = (goal_theta - self.current_pose.theta) * kpa
 
         # distance calculation
-        kpl = 1.2
+        kpl = 2.2
         distance = math.sqrt((target_y - self.current_pose.y)**2 + (target_x - self.current_pose.x)**2)
         linear_error = distance * kpl
         
@@ -59,10 +59,8 @@ class goToNode(Node):
 def main(args=None):
     rclpy.init(args=args) # to start ros2 communication
 
-    
     node = goToNode()
     rclpy.spin(node)
-
 
     rclpy.shutdown() # to end ros2 communication
 
