@@ -27,7 +27,7 @@ class goToNode(Node):
         self.get_logger().info("The GO_TO node has been started....")
         self.current_pose = Pose()    
         self.points:Coordinates2D = []
-        self.names:String = []
+        self.names:String = [] 
 
     def kill_turtle(self, name:String):
 
@@ -59,9 +59,9 @@ class goToNode(Node):
 
             if self.go_to_x_y(x, y):
                 # case the turtle has reached the target
-                self.kill_turtle(name=self.names[0])
+                #self.kill_turtle(name=self.names[0])
                 self.points.pop(0)
-                self.names.pop(0)
+                #self.names.pop(0)
         else:
             self.get_logger().info("The turtle is dead :(")
 
@@ -69,18 +69,18 @@ class goToNode(Node):
         target_x = x
         target_y = y
 
-        angular_tolerance = 0.05
-        linear_tolerance = 0.05
+        angular_tolerance = 0.0001
+        linear_tolerance = 0.1
 
         msg = Twist()
 
         # angle calculation
-        kpa = 3.8
+        kpa = 3.5
         goal_theta = math.atan2(target_y - self.current_pose.y, target_x - self.current_pose.x)
         angular_error = (goal_theta - self.current_pose.theta) * kpa
 
         # distance calculation
-        kpl = 2.2
+        kpl = 2.8
         distance = math.sqrt((target_y - self.current_pose.y)**2 + (target_x - self.current_pose.x)**2)
         linear_error = distance * kpl
         
@@ -97,8 +97,8 @@ class goToNode(Node):
         self.myPub.publish(msg=msg)
 
         if math.fabs(angular_error) < angular_tolerance and math.fabs(linear_error) < linear_tolerance:     
-            #self.get_logger().info(f"The Goal x: {self.current_pose.x}, y: {self.current_pose.y} has been reached")
-            self.get_logger().info(f"The Goal has been reached")
+            self.get_logger().info(f"The Goal x: {self.current_pose.x}, y: {self.current_pose.y} has been reached")
+            #self.get_logger().info(f"The Goal has been reached")
             return true
         else:
             self.get_logger().info(f"Distance: {linear_error}, Alpha: {angular_error}")
@@ -134,8 +134,8 @@ class goToNode(Node):
         msg.angular.z = angular_error
 
         if math.fabs(angular_error) < angular_tolerance and math.fabs(linear_error) < linear_tolerance:     
-            #self.get_logger().info(f"The Goal x: {self.current_pose.x}, y: {self.current_pose.y} has been reached")
-            self.get_logger().info(f"The Goal has been reached")
+            self.get_logger().info(f"The Goal x: {self.current_pose.x}, y: {self.current_pose.y} has been reached")
+            #self.get_logger().info(f"The Goal (x: {target_x}, y: {target_y}) has been reached")
         else:
             self.get_logger().info(f"Distance: {linear_error}, Alpha: {angular_error}")
 
