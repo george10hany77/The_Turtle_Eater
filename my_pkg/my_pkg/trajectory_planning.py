@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from asyncio import Future
 import re
 from my_custom_interfaces.msg import Coordinates2D
@@ -15,7 +16,7 @@ class trajectoryNode(Node):
         self.client = self.create_client(MoveTurtle, "moveTurtle")
         self.spawnerClient = self.create_client(Spawn, "/spawn")
         self.names_publisher = self.create_publisher(String, "/names", 10)
-        self.timer = self.create_timer(random.uniform(2.5, 3.5), self.make_move)
+        self.timer = self.create_timer(random.uniform(3, 4.5), self.make_move)
 
     def spawn_turtle(self, x, y):
         
@@ -45,8 +46,8 @@ class trajectoryNode(Node):
         while not self.client.wait_for_service(1.0):
             self.get_logger().warn("Waiting for the move server....")
 
-        r_x = random.uniform(0.0, 11.0)
-        r_y = random.uniform(0.0, 11.0)
+        r_x = round(random.uniform(0.0, 11.0), 0) # making the map smaller
+        r_y = round(random.uniform(0.0, 11.0), 0) # making the map smaller
         
         self.spawn_turtle(r_x, r_y)
 
